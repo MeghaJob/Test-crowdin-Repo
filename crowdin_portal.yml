@@ -1,6 +1,6 @@
 project_id_env: CROWDIN_PROJECT_ID_PORTAL
 api_token_env: CROWDIN_PERSONAL_TOKEN_PORTAL
 files:
-  - source: /config/locales/portal/en.yml
+  - source: /locales/en.yml
     update_option: update_without_changes
     translation: "%locale%.yml"

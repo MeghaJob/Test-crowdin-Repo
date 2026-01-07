@@ -1,0 +1,22 @@
+name: Upload Portal Source Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-portal-sources-workflow:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: crowdin action
+        uses: freshactions/crowdin-github-action@1.4.0
+        with:
+          upload_sources: true
+          config_file: crowdin_portal.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID_PORTAL: ${{ secrets.CROWDIN_PROJECT_ID_PORTAL }}
+          CROWDIN_PERSONAL_TOKEN_PORTAL: ${{ secrets.CROWDIN_PERSONAL_TOKEN_PORTAL }}

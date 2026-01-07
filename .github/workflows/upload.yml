@@ -4,7 +4,7 @@ on:
 
 jobs:
   upload-portal-sources-workflow:
-    runs-on: [self-hosted, Linux]
+    # runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

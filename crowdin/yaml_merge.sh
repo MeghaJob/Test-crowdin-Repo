@@ -25,8 +25,8 @@ for flat_file in $new_dir/*.yml; do
     echo "Processing $filename -> ${lang_code}.yml"
     
     if [ -f "$source_dir/${lang_code}.yml" ]; then
-      # Merge with existing file
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' "$source_dir/${lang_code}.yml" "$flat_file" | sed -e 's/\\_/ /g' > "$source_dir/${lang_code}.yml"
+      # Merge with existing file - new file takes priority
+      yq eval-all 'select(fileIndex == 1) * select(fileIndex == 0)' "$source_dir/${lang_code}.yml" "$flat_file" | sed -e 's/\\_/ /g' > "$source_dir/${lang_code}.yml"
       echo "✓ Merged $crowdin_locale into ${lang_code}.yml"
     else
       # Copy as new file

@@ -25,9 +25,18 @@ for flat_file in $new_dir/*.yml; do
     echo "Processing $filename -> ${lang_code}.yml"
     
     if [ -f "$source_dir/${lang_code}.yml" ]; then
-      # Merge with existing file - new file takes priority
-      yq eval-all 'select(fileIndex == 1) * select(fileIndex == 0)' "$source_dir/${lang_code}.yml" "$flat_file" | sed -e 's/\\_/ /g' > "$source_dir/${lang_code}.yml"
-      echo "✓ Merged $crowdin_locale into ${lang_code}.yml"
+      # Check if existing file has actual content (more than just empty structure)
+      content_lines=$(grep -v "^${lang_code}:" "$source_dir/${lang_code}.yml" | grep -v "^[[:space:]]*$" | grep -v "^[[:space:]]*portal_translations:" | wc -l)
+      
+      if [ "$content_lines" -gt 0 ]; then
+        # Existing file has content, merge with new file (new takes priority)
+        yq eval-all 'select(fileIndex == 1) * select(fileIndex == 0)' "$source_dir/${lang_code}.yml" "$flat_file" | sed -e 's/\\_/ /g' > "$source_dir/${lang_code}.yml"
+        echo "✓ Merged $crowdin_locale into ${lang_code}.yml"
+      else
+        # Existing file is empty, just replace it
+        cp "$flat_file" "$source_dir/${lang_code}.yml"
+        echo "✓ Replaced empty ${lang_code}.yml with $crowdin_locale"
+      fi
     else
       # Copy as new file
       cp "$flat_file" "$source_dir/${lang_code}.yml"
@@ -91,23 +100,30 @@ done
 
 rm temp_file.yml
 
-for lang in `ls $new_dir`
+for lang in `ls $new_dir 2>/dev/null`
 do
   if [[ ${ignore_langs[*]} =~ "$lang" ]]
   then
     echo "Skipped lang $lang"
-  else
-    filename=`ls $new_dir/$lang`
-    cp $new_dir/$lang/$filename new.yaml
-    echo "$source_dir/${lang}.yml"
-    cp $source_dir/${lang}.yml old.yaml
-    # Refer https://mikefarah.gitbook.io/yq/operators/multiply-merge#merging-files
-    # Portal translations have portal_translations as root key, so we merge preserving that structure
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' old.yaml new.yaml | sed -e 's/\\_/ /g' > "${source_dir}/${lang}.yml"
-    echo "copied over $lang"
+  elif [ -d "$new_dir/$lang" ]; then
+    filename=`ls $new_dir/$lang 2>/dev/null | head -n 1`
+    if [ -n "$filename" ] && [ -f "$new_dir/$lang/$filename" ]; then
+      cp $new_dir/$lang/$filename new.yaml
+      echo "$source_dir/${lang}.yml"
+      
+      if [ -f "$source_dir/${lang}.yml" ]; then
+        cp $source_dir/${lang}.yml old.yaml
+        # Refer https://mikefarah.gitbook.io/yq/operators/multiply-merge#merging-files
+        # Portal translations have portal_translations as root key, so we merge preserving that structure
+        # New file takes priority over old file
+        yq eval-all 'select(fileIndex == 1) * select(fileIndex == 0)' old.yaml new.yaml | sed -e 's/\\_/ /g' > "${source_dir}/${lang}.yml"
+        echo "copied over $lang"
+        rm old.yaml new.yaml
+      else
+        cp new.yaml "${source_dir}/${lang}.yml"
+        rm new.yaml
+      fi
+    fi
   fi
 done
-
-rm old.yaml
-rm new.yaml
 

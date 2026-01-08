@@ -9,7 +9,7 @@ move_dir(){
   fi
 }
 
-source_dir=../../config/locales/portal
+source_dir=../../locales
 new_dir=./tmp
 
 # TODO:

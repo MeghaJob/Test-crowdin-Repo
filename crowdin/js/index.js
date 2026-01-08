@@ -68,7 +68,7 @@ const downloadTranslations = (zipURL) => {
     console.log('Zip download status ', res.status);
     var zipFile = new AdmZip(res.data);
     zipFile.extractAllTo('./tmp');
-    shell.exec(`chmod +x yaml_merge_portal.sh && ./yaml_merge_portal.sh`);
+    shell.exec(`chmod +x yaml_merge.sh && ./yaml_merge.sh`);
     console.log("Removing package lock json file");
     shell.exec('rm -rf tmp && cd js && [ -f "package-lock.json" ] && rm package-lock.json && cd ..')
   }).catch(err=> {

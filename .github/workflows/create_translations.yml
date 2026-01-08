@@ -49,6 +49,11 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H_%M_%S')"
 
+      - name: Clean up node_modules
+        run: |
+          rm -rf crowdin/js/node_modules
+          rm -f crowdin/js/package-lock.json
+
       - name: Get Reviewers from CODEOWNERS
         id: reviewers
         working-directory: .github

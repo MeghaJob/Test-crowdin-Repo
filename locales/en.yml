@@ -2,3 +2,7 @@ en:
   portal_translations:
     plain_no: "No"
     plain_yes: "Yes"
+    by: "by"
+    via: "via"
+    at: "at"
+    or: "or"

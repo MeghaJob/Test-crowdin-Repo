@@ -9,7 +9,7 @@ move_dir(){
   fi
 }
 
-source_dir=../../locales
+source_dir=../locales
 new_dir=./tmp
 
 # First, handle flat file structure (e.g., ar-SA.yml, de-DE.yml, fr-FR.yml)

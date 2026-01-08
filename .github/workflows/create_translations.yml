@@ -1,9 +1,5 @@
 name: Create Portal Translation PR Workflow
 on:
-  push:
-    branches: [ main ] # Used to manually trigger workflow. Reverse merge branch with falcon-prestaging before triggering
-    paths:
-    - locales/en.yml
 
   workflow_dispatch:
 

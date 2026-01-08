@@ -53,15 +53,13 @@ jobs:
           echo "::set-output name=reviewers::${reviewers}"
 
       - name: Create Pull Request
-        uses: freshactions/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v5
         with:
-          base: main
-          reviewers: ${{steps.reviewers.outputs.reviewers}}
-          assignees: ${{steps.reviewers.outputs.reviewers}}
           commit-message: Portal Translation Updates from Crowdin
           title: Portal Translation Updates from Crowdin
           body: Portal Translation Updates from Crowdin
           branch: portal-translation-updates-${{ steps.date.outputs.date }}
-          add-paths: |
-            locales/*.yml
+          base: main
+          reviewers: ${{steps.reviewers.outputs.reviewers}}
+          assignees: ${{steps.reviewers.outputs.reviewers}}
 

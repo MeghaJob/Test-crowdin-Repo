@@ -1,0 +1,5 @@
+# CODEOWNERS file
+# These owners will be requested for review when someone opens a pull request
+
+# Workflow owners
+.github/workflows/create_translations.yml @MeghaJob

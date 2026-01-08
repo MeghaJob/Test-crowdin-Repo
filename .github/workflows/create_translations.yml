@@ -1,0 +1,67 @@
+name: Create Portal Translation PR Workflow
+on:
+  push:
+    branches: [ main ] # Used to manually trigger workflow. Reverse merge branch with falcon-prestaging before triggering
+    paths:
+    - locales/en.yml
+
+  workflow_dispatch:
+
+jobs:
+  create-portal-translation-pr-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Check current branch name
+        shell: bash
+        run: |
+          echo "Ref::: ${{ github.ref }}"
+          echo "Head Ref:: ${{ github.head_ref }}"
+          echo "Base Ref:: ${{ github.base_ref }}"
+        id: extract_branch
+  
+      - name: Install yq
+        run: |
+          sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.13.5/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Run Script
+        shell: bash
+        working-directory: crowdin
+        run: |
+          cd ./js && npm install && cd ..
+          node js/index.js ${{ secrets.CROWDIN_PROJECT_ID_PORTAL }} ${{ secrets.CROWDIN_PERSONAL_TOKEN_PORTAL }}
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H_%M_%S')"
+
+      - name: Get Reviewers from CODEOWNERS
+        id: reviewers
+        working-directory: .github
+        shell: bash
+        run: |
+          reviewers="$(grep .github/workflows/create_translations.yml CODEOWNERS | sed 's/@/,/g;s/^[^,]*,//g')"
+          echo "$reviewers"
+          echo "::set-output name=reviewers::${reviewers}"
+
+      - name: Create Pull Request
+        uses: freshactions/create-pull-request@v3
+        with:
+          base: main
+          reviewers: ${{steps.reviewers.outputs.reviewers}}
+          assignees: ${{steps.reviewers.outputs.reviewers}}
+          commit-message: Portal Translation Updates from Crowdin
+          title: Portal Translation Updates from Crowdin
+          body: Portal Translation Updates from Crowdin
+          branch: portal-translation-updates-${{ steps.date.outputs.date }}
+          add-paths: |
+            locales/*.yml
+

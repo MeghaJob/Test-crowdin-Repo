@@ -12,6 +12,33 @@ move_dir(){
 source_dir=../../locales
 new_dir=./tmp
 
+# First, handle flat file structure (e.g., ar-SA.yml, de-DE.yml, fr-FR.yml)
+# Convert locale codes like ar-SA to language codes like ar
+echo "Processing flat file translations..."
+for flat_file in $new_dir/*.yml; do
+  if [ -f "$flat_file" ]; then
+    filename=$(basename "$flat_file")
+    crowdin_locale="${filename%.yml}"
+    # Extract language code (first part before hyphen, e.g., ar-SA -> ar)
+    lang_code="${crowdin_locale%%-*}"
+    
+    echo "Processing $filename -> ${lang_code}.yml"
+    
+    if [ -f "$source_dir/${lang_code}.yml" ]; then
+      # Merge with existing file
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' "$source_dir/${lang_code}.yml" "$flat_file" | sed -e 's/\\_/ /g' > "$source_dir/${lang_code}.yml"
+      echo "✓ Merged $crowdin_locale into ${lang_code}.yml"
+    else
+      # Copy as new file
+      cp "$flat_file" "$source_dir/${lang_code}.yml"
+      echo "✓ Created new ${lang_code}.yml from $crowdin_locale"
+    fi
+    
+    # Remove processed flat file
+    rm "$flat_file"
+  fi
+done
+
 # TODO:
 # Add other mappings like PT-BR, pt-pt, sv-se - Done
 # automate parent key change - Done using yq yaml processor (https://mikefarah.gitbook.io/yq/)

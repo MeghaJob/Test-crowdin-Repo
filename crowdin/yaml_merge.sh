@@ -12,6 +12,27 @@ move_dir(){
 source_dir=../locales
 new_dir=./tmp
 
+# First, handle flat file structure (e.g., ar-SA.yml, de-DE.yml, fr-FR.yml)
+# Convert locale codes like ar-SA to language codes like ar
+echo "Processing flat file translations..."
+for flat_file in $new_dir/*.yml; do
+  if [ -f "$flat_file" ]; then
+    filename=$(basename "$flat_file")
+    crowdin_locale="${filename%.yml}"
+    # Extract language code (first part before hyphen, e.g., ar-SA -> ar)
+    lang_code="${crowdin_locale%%-*}"
+    
+    echo "Processing $filename -> ${lang_code}.yml"
+    
+    # Simply replace the file with Crowdin's version (Crowdin is source of truth)
+    cp "$flat_file" "$source_dir/${lang_code}.yml"
+    echo "✓ Updated ${lang_code}.yml from $crowdin_locale"
+    
+    # Remove processed flat file
+    rm "$flat_file"
+  fi
+done
+
 # TODO:
 # Add other mappings like PT-BR, pt-pt, sv-se - Done
 # automate parent key change - Done using yq yaml processor (https://mikefarah.gitbook.io/yq/)

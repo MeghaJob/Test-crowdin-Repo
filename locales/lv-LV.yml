@@ -1,2 +1,11 @@
 lv-LV:
   portal_translations:
+    plain_no: "No"
+    plain_yes: "Yes"
+    by: "by"
+    via: "via"
+    at: "at"
+    or: "or"
+    and: "and"
+    close: "Close"
+    submit: "Submit"

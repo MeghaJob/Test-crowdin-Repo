@@ -9,3 +9,9 @@ es:
     and: "and"
     close: "Close"
     submit: "Submit"
+    tested_on: "Tested on"
+    portal_alerts:
+      go_agent_portal: "Go to Agent Portal"
+    header:
+      tabs:
+        home: "Home"

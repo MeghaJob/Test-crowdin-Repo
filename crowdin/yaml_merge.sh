@@ -39,7 +39,7 @@ done
 
 # language mappings
 declare -a  ignore_langs=("en cy lv")
-declare -a  provider_code=("es-ES ja es-MX no pt pt ru sv")
+declare -a  provider_code=("es-ES ja-JP es-MX no pt-BR pt ru sv")
 declare -a  app_code=("es" "ja-JP" "es-LA" "nb-NO" "pt-BR" "pt-PT" "ru-RU" "sv-SE")
 
 # Each language starts with a root keyname eg: for English, it is en:, for french, it is fr:

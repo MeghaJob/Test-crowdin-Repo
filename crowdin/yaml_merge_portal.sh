@@ -67,7 +67,7 @@ find "$new_dir" -type f -name "*.yml" | while read -r file; do
   echo "➡️  Processing $locale → $final_locale.yml"
 
   # Extract translations from base root
-  yq eval ".${base_lang}" "$file" > /tmp/crowdin_tmp.yml
+  yq eval ".${locale}" "$file" > /tmp/crowdin_tmp.yml
 
   # Wrap with correct root
   yq eval "{\"$final_locale\": .}" /tmp/crowdin_tmp.yml > /tmp/new.yml

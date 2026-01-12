@@ -12,6 +12,14 @@ ru-RU:
     tested_on: "Tested on"
     portal_alerts:
       go_agent_portal: "Go to Agent Portal"
+      stay_on_portal: "Stay on Portal"
+      go_to_admin: "Go to Admin"
     header:
       tabs:
         home: "Home"
+        solutions: "Solutions"
+      sidebar:
+        dashboard: "Dashboard"
+        tickets: "Tickets"
+        settings: "Settings"
+    not: "not"

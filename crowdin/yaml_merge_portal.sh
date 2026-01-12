@@ -28,6 +28,11 @@ REGION_LOCALES=(
   "zh-TW"
 )
 
+# Special mappings: Crowdin locale -> Your filename
+declare -A SPECIAL_MAPPINGS
+SPECIAL_MAPPINGS["es-ES"]="es"
+SPECIAL_MAPPINGS["es-419"]="es-LA"
+
 contains () {
   local match="$1"; shift
   for item in "$@"; do
@@ -47,8 +52,13 @@ find "$new_dir" -type f -name "*.yml" | while read -r file; do
     continue
   fi
 
+  # Check for special mappings first
+  if [ -n "${SPECIAL_MAPPINGS[$locale]:-}" ]; then
+    final_locale="${SPECIAL_MAPPINGS[$locale]}"
+    base_lang="${locale%%-*}"
+    echo "🔀 Special mapping: $locale → $final_locale.yml"
   # Decide final output locale
-  if contains "$locale" "${REGION_LOCALES[@]}"; then
+  elif contains "$locale" "${REGION_LOCALES[@]}"; then
     final_locale="$locale"
     base_lang="${locale%%-*}"
   else

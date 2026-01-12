@@ -21,14 +21,14 @@ REGION_LOCALES=(
   "pt-PT"
   "ru-RU"
   "sv-SE"
-  "zh-CN"
   "zh-HK"
-  "zh-TW"
 )
 
 # Special mappings: Crowdin locale -> Your filename
 declare -A SPECIAL_MAPPINGS
 SPECIAL_MAPPINGS["es-419"]="es-LA"
+SPECIAL_MAPPINGS["zh-CN"]="zh-CN"
+SPECIAL_MAPPINGS["zh-TW"]="zh-TW"
 
 contains () {
   local match="$1"; shift
@@ -52,7 +52,7 @@ find "$new_dir" -type f -name "*.yml" | while read -r file; do
   # Check for special mappings first
   if [ -n "${SPECIAL_MAPPINGS[$locale]:-}" ]; then
     final_locale="${SPECIAL_MAPPINGS[$locale]}"
-    base_lang="${locale%%-*}"
+    base_lang="$locale"
     echo "🔀 Special mapping: $locale → $final_locale.yml"
   # Decide final output locale
   elif contains "$locale" "${REGION_LOCALES[@]}"; then
@@ -67,7 +67,7 @@ find "$new_dir" -type f -name "*.yml" | while read -r file; do
   echo "➡️  Processing $locale → $final_locale.yml"
 
   # Extract translations from base root
-  yq eval ".${locale}" "$file" > /tmp/crowdin_tmp.yml
+  yq eval ".${base_lang}" "$file" > /tmp/crowdin_tmp.yml
 
   # Wrap with correct root
   yq eval "{\"$final_locale\": .}" /tmp/crowdin_tmp.yml > /tmp/new.yml

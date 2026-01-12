@@ -13,7 +13,6 @@ IGNORE_LANGS=("en" "cy")
 REGION_LOCALES=(
   "en-GB"
   "es-419"
-  "es-LA"
   "fr-BE"
   "ja-JP"
   "lv-LV"
@@ -30,7 +29,6 @@ REGION_LOCALES=(
 
 # Special mappings: Crowdin locale -> Your filename
 declare -A SPECIAL_MAPPINGS
-SPECIAL_MAPPINGS["es-ES"]="es"
 SPECIAL_MAPPINGS["es-419"]="es-LA"
 
 contains () {

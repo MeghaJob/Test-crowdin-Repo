@@ -8,11 +8,18 @@ en:
     portal_alerts:
       go_agent_portal: "Go to Agent Portal"
       stay_on_portal: "Stay on Portal"
+      go_to_admin: "Go to Admin"
     at: "at"
     or: "or"
     and: "and"
+    not: "not"
     close: "Close"
     submit: "Submit"
     header:
+      sidebar:
+        dashboard: "Dashboard"
+        tickets: "Tickets"
+        settings: "Settings"
       tabs:
         home: "Home"
+        solutions: "Solutions"

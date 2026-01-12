@@ -7,12 +7,11 @@ new_dir="./tmp"
 echo "🔄 Processing Crowdin translations..."
 
 # Languages to skip completely
-IGNORE_LANGS=("en" "cy")
+IGNORE_LANGS=("en" "cy" "cy-GB")
 
 # Region-based locales we want to KEEP
 REGION_LOCALES=(
   "en-GB"
-  "es-419"
   "fr-BE"
   "ja-JP"
   "lv-LV"

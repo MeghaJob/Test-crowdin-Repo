@@ -1,17 +1,1 @@
-ru-RU:
-  portal_translations:
-    plain_no: "No"
-    plain_yes: "Yes"
-    by: "by"
-    via: "via"
-    at: "at"
-    or: "or"
-    and: "and"
-    close: "Close"
-    submit: "Submit"
-    tested_on: "Tested on"
-    portal_alerts:
-      go_agent_portal: "Go to Agent Portal"
-    header:
-      tabs:
-        home: "Home"
+ru-RU: null
